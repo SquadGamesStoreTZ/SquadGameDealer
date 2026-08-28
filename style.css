@@ -1,0 +1,170 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --accent-color: #38bdf8;
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --savings-green: #22c55e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid #334155;
+}
+
+.search-box {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.search-box button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    background-color: var(--accent-color);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-box button:hover {
+    background-color: #0284c7;
+    color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    flex: 1;
+}
+
+.status-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-top: 3rem;
+}
+
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.game-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #334155;
+    transition: transform 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+}
+
+.game-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.card-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.card-details h3 {
+    font-size: 1.1rem;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.sale-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--savings-green);
+}
+
+.normal-price {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.savings-badge {
+    background-color: var(--savings-green);
+    color: #000;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.deal-btn {
+    display: block;
+    text-align: center;
+    padding: 0.6rem;
+    background-color: var(--accent-color);
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 0.75rem;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    border-top: 1px solid #334155;
+    color: var(--text-muted);
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}

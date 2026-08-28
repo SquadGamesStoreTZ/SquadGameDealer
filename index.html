@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Deal Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <h1>🎮 DealFinder</h1>
+        </div>
+        <form id="search-form" class="search-box">
+            <input 
+                type="text" 
+                id="search-input" 
+                placeholder="Search for games (e.g. Cyberpunk, Witcher)..." 
+                required 
+                autocomplete="off"
+            >
+            <button type="submit" id="search-btn">Search</button>
+        </form>
+    </header>
+
+    <!-- Filter & Sort Controls -->
+    <div class="controls-bar">
+        <div class="filter-group">
+            <label for="store-filter">Store:</label>
+            <select id="store-filter">
+                <option value="ALL">All Stores</option>
+                <option value="1">Steam</option>
+                <option value="7">GOG</option>
+                <option value="25">Epic Games</option>
+                <option value="8">EA App</option>
+                <option value="11">Humble Store</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sort-by">Sort By:</label>
+            <select id="sort-by">
+                <option value="deal-rating">Best Deal</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="savings">Highest Discount</option>
+            </select>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Status / Feedback Message -->
+        <section id="status-message" class="status-message">
+            <p>Search for a game title above to compare prices across stores.</p>
+        </section>
+
+        <!-- Deals Results Grid -->
+        <section id="deals-grid" class="deals-grid"></section>
+    </main>
+
+    <footer>
+        <p>Powered by <a href="https://www.cheapshark.com/api/1.0/" target="_blank" rel="noopener">CheapShark API</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
