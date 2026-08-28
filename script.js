@@ -1,6 +1,26 @@
 const API_URL = 'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50';
 let allDeals = [];
 
+// Curated list of preferred franchise keywords to feature first
+const PRIORITY_KEYWORDS = [
+    'the last of us',
+    'gta v',
+    'grand theft auto v',
+    'need for speed heat',
+    'nfs heat',
+    'tomb raider',
+    'carx street',
+    'euro truck simulator 2',
+    'ets 2',
+    'nfs unbound',
+    'need for speed unbound',
+    'need for speed payback',
+    'nfs payback',
+    'crew motorfest',
+    'forza horizon',
+    'call of duty'
+];
+
 const gamesContainer = document.getElementById('gamesContainer');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
@@ -11,11 +31,34 @@ async function fetchDeals() {
         gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading amazing deals...</p>';
         const response = await fetch(API_URL);
         allDeals = await response.json();
-        displayDeals(allDeals);
+        
+        // Process deals to prioritize user's favorite games and ensure 12 initial cards
+        const prioritizedDeals = sortAndTrimDeals(allDeals);
+        displayDeals(prioritizedDeals);
     } catch (error) {
         gamesContainer.innerHTML = '<p style="text-align: center; color: #ef4444; grid-column: 1 / -1;">Failed to load deals. Please try again later.</p>';
         console.error('Error fetching deals:', error);
     }
+}
+
+function sortAndTrimDeals(deals) {
+    let matchedDeals = [];
+    let otherDeals = [];
+
+    // Separate deals matching the user's favorite games from the rest
+    deals.forEach(deal => {
+        const titleLower = deal.title.toLowerCase();
+        const isPriority = PRIORITY_KEYWORDS.some(keyword => titleLower.includes(keyword));
+        if (isPriority) {
+            matchedDeals.push(deal);
+        } else {
+            otherDeals.push(deal);
+        }
+    });
+
+    // Combine them with user's favorites first, then pad or cut to exactly 12 games
+    let combined = [...matchedDeals, ...otherDeals];
+    return combined.slice(0, 12);
 }
 
 function displayDeals(deals) {
@@ -72,7 +115,7 @@ filterChips.forEach(chip => {
             filtered = allDeals.filter(deal => parseFloat(deal.savings) >= 90);
         }
 
-        displayDeals(filtered);
+        displayDeals(filtered.slice(0, 12));
     });
 });
 
