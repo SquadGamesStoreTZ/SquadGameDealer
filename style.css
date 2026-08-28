@@ -17,7 +17,7 @@
 
 body {
     background-color: var(--bg-color);
-    background-image: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), url('My Web Background.jpg');
+    background-image: linear-gradient(rgba(15, 42, 29, 0.65), rgba(15, 23, 42, 0.65)), url('squardii.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
