@@ -17,7 +17,7 @@
 
 body {
     background-color: var(--bg-color);
-    background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('Gemini_Generated_Image_pcxxpupcxxpupcxx.jpg');
+    background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('My Web Background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
