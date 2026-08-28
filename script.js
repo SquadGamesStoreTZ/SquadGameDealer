@@ -1,4 +1,4 @@
-// Hardcoded list of your exact favorite games
+// Your exact favorite 12 games to show at the top
 const MY_FAVORITE_GAMES = [
     {
         title: "The Last of Us",
@@ -101,15 +101,13 @@ async function fetchDeals() {
     try {
         gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading games...</p>';
         
-        // Fetch live deals from CheapShark API as extra background deals
         const response = await fetch('https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50');
         const apiDeals = await response.json();
         
-        // Combine your custom 12 games first, followed by live API deals
+        // Combine your custom games first, then live API deals
         allDeals = [...MY_FAVORITE_GAMES, ...apiDeals];
         displayDeals(allDeals.slice(0, 12));
     } catch (error) {
-        // Fallback to just showing your games if API fails
         displayDeals(MY_FAVORITE_GAMES);
     }
 }
