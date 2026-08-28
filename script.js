@@ -1,21 +1,96 @@
-const API_URL = 'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50';
-let allDeals = [];
-
-// Exact keywords to prioritize your favorite games at the top
-const PRIORITY_KEYWORDS = [
-    'the last of us',
-    'gta v',
-    'grand theft auto',
-    'need for speed',
-    'nfs',
-    'tomb raider',
-    'carx',
-    'euro truck simulator',
-    'ets 2',
-    'crew motorfest',
-    'forza horizon',
-    'call of duty'
+// Hardcoded list of your exact favorite games
+const MY_FAVORITE_GAMES = [
+    {
+        title: "The Last of Us",
+        salePrice: "39.99",
+        normalPrice: "59.99",
+        savings: "33",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1888930/header.jpg",
+        dealID: "last-of-us"
+    },
+    {
+        title: "Grand Theft Auto V",
+        salePrice: "14.99",
+        normalPrice: "29.99",
+        savings: "50",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg",
+        dealID: "gta-v"
+    },
+    {
+        title: "Need for Speed Heat",
+        salePrice: "3.50",
+        normalPrice: "35.00",
+        savings: "90",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222680/header.jpg",
+        dealID: "nfs-heat"
+    },
+    {
+        title: "Tomb Raider",
+        salePrice: "2.99",
+        normalPrice: "19.99",
+        savings: "85",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/203160/header.jpg",
+        dealID: "tomb-raider"
+    },
+    {
+        title: "CarX Street",
+        salePrice: "15.99",
+        normalPrice: "19.99",
+        savings: "20",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1110430/header.jpg",
+        dealID: "carx-street"
+    },
+    {
+        title: "Euro Truck Simulator 2",
+        salePrice: "4.99",
+        normalPrice: "19.99",
+        savings: "75",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/227300/header.jpg",
+        dealID: "ets-2"
+    },
+    {
+        title: "Need for Speed Unbound",
+        salePrice: "6.99",
+        normalPrice: "69.99",
+        savings: "90",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1846380/header.jpg",
+        dealID: "nfs-unbound"
+    },
+    {
+        title: "Need for Speed Payback",
+        salePrice: "4.99",
+        normalPrice: "29.99",
+        savings: "83",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1262580/header.jpg",
+        dealID: "nfs-payback"
+    },
+    {
+        title: "The Crew Motorfest",
+        salePrice: "23.99",
+        normalPrice: "59.99",
+        savings: "60",
+        thumb: "https://cdn1.epicgames.com/offer/1f7a0799f9064789bcf279b63a233b8b/EGS_TheCrewMotorfest_UbisoftReflections_S2_1200x1600-9831ce2313b35f6062f4bc699b3848b6",
+        dealID: "crew-motorfest"
+    },
+    {
+        title: "Forza Horizon 5",
+        salePrice: "29.99",
+        normalPrice: "59.99",
+        savings: "50",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg",
+        dealID: "forza-horizon-5"
+    },
+    {
+        title: "Call of Duty",
+        salePrice: "19.99",
+        normalPrice: "49.99",
+        savings: "60",
+        thumb: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1938090/header.jpg",
+        dealID: "call-of-duty"
+    }
 ];
+
+let allDeals = [...MY_FAVORITE_GAMES];
 
 const gamesContainer = document.getElementById('gamesContainer');
 const searchInput = document.getElementById('searchInput');
@@ -24,36 +99,19 @@ const filterChips = document.querySelectorAll('.chip');
 
 async function fetchDeals() {
     try {
-        gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading amazing deals...</p>';
-        const response = await fetch(API_URL);
-        allDeals = await response.json();
+        gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading games...</p>';
         
-        // Sort deals so your favorite games appear first
-        const sortedDeals = sortDealsByPriority(allDeals);
-        displayDeals(sortedDeals);
+        // Fetch live deals from CheapShark API as extra background deals
+        const response = await fetch('https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50');
+        const apiDeals = await response.json();
+        
+        // Combine your custom 12 games first, followed by live API deals
+        allDeals = [...MY_FAVORITE_GAMES, ...apiDeals];
+        displayDeals(allDeals.slice(0, 12));
     } catch (error) {
-        gamesContainer.innerHTML = '<p style="text-align: center; color: #ef4444; grid-column: 1 / -1;">Failed to load deals. Please try again later.</p>';
-        console.error('Error fetching deals:', error);
+        // Fallback to just showing your games if API fails
+        displayDeals(MY_FAVORITE_GAMES);
     }
-}
-
-function sortDealsByPriority(deals) {
-    let priorityDeals = [];
-    let otherDeals = [];
-
-    deals.forEach(deal => {
-        const titleLower = deal.title.toLowerCase();
-        const isPriority = PRIORITY_KEYWORDS.some(keyword => titleLower.includes(keyword));
-        
-        if (isPriority) {
-            priorityDeals.push(deal);
-        } else {
-            otherDeals.push(deal);
-        }
-    });
-
-    // Put your priority games first, followed by the rest, limited to 12 items
-    return [...priorityDeals, ...otherDeals].slice(0, 12);
 }
 
 function displayDeals(deals) {
@@ -63,7 +121,7 @@ function displayDeals(deals) {
     }
 
     gamesContainer.innerHTML = deals.map(deal => {
-        const discount = Math.round(deal.savings);
+        const discount = Math.round(deal.savings || 0);
         return `
             <div class="game-card">
                 ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
@@ -74,7 +132,7 @@ function displayDeals(deals) {
                         <span class="sale-price">$${deal.salePrice}</span>
                         <span class="normal-price">$${deal.normalPrice}</span>
                     </div>
-                    <a href="https://www.cheapshark.com/redirect?dealID=${deal.dealID}" target="_blank" class="deal-btn">Get Deal</a>
+                    <a href="https://www.google.com/search?q=${encodeURIComponent(deal.title + ' buy game deal')}" target="_blank" class="deal-btn">Get Deal</a>
                 </div>
             </div>
         `;
@@ -110,9 +168,9 @@ filterChips.forEach(chip => {
             filtered = allDeals.filter(deal => parseFloat(deal.savings) >= 90);
         }
 
-        displayDeals(sortDealsByPriority(filtered));
+        displayDeals(filtered.slice(0, 12));
     });
 });
 
-// Initial fetch on page load
+// Initial load
 fetchDeals();
