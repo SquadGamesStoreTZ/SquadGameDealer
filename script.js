@@ -1,68 +1,80 @@
+const API_URL = 'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50';
+let allDeals = [];
+
+const gamesContainer = document.getElementById('gamesContainer');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
-const gamesContainer = document.getElementById('gamesContainer');
+const filterChips = document.querySelectorAll('.chip');
 
-// Fetch trending deals on page load
-window.addEventListener('DOMContentLoaded', () => {
-    fetchDeals('');
-});
-
-searchBtn.addEventListener('click', () => {
-    fetchDeals(searchInput.value.trim());
-});
-
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        fetchDeals(searchInput.value.trim());
-    }
-});
-
-async function fetchDeals(query) {
-    gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #fff;">Searching for game deals...</p>';
-
-    let url = 'https://www.cheapshark.com/api/1.0/deals?sortBy=Savings&pageSize=12';
-    if (query) {
-        url = `https://www.cheapshark.com/api/1.0/deals?title=${encodeURIComponent(query)}&pageSize=12`;
-    }
-
+async function fetchDeals() {
     try {
-        const response = await fetch(url);
-        const deals = await response.json();
-        displayDeals(deals);
+        gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading amazing deals...</p>';
+        const response = await fetch(API_URL);
+        allDeals = await response.json();
+        displayDeals(allDeals);
     } catch (error) {
-        gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load deals. Please check your connection.</p>';
+        gamesContainer.innerHTML = '<p style="text-align: center; color: #ef4444; grid-column: 1 / -1;">Failed to load deals. Please try again later.</p>';
+        console.error('Error fetching deals:', error);
     }
 }
 
 function displayDeals(deals) {
-    gamesContainer.innerHTML = '';
-
-    if (!deals || deals.length === 0) {
-        gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #fff;">No game deals found.</p>';
+    if (deals.length === 0) {
+        gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">No game deals found.</p>';
         return;
     }
 
-    deals.forEach(deal => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-
-        const normalPrice = parseFloat(deal.normalPrice).toFixed(2);
-        const salePrice = parseFloat(deal.salePrice).toFixed(2);
-
-        card.innerHTML = `
-            <img src="${deal.thumb}" alt="${deal.title}" onerror="this.src='https://via.placeholder.com/200x110?text=Game'">
-            <div class="game-info">
-                <div>
+    gamesContainer.innerHTML = deals.map(deal => {
+        const discount = Math.round(deal.savings);
+        return `
+            <div class="game-card">
+                ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
+                <img src="${deal.thumb}" alt="${deal.title}" class="game-thumb" loading="lazy">
+                <div class="game-info">
                     <h3 class="game-title" title="${deal.title}">${deal.title}</h3>
-                    <div class="game-price-row">
-                        <span class="normal-price">$${normalPrice}</span>
-                        <span class="sale-price">$${salePrice}</span>
+                    <div class="game-pricing">
+                        <span class="sale-price">$${deal.salePrice}</span>
+                        <span class="normal-price">$${deal.normalPrice}</span>
                     </div>
+                    <a href="https://www.cheapshark.com/redirect?dealID=${deal.dealID}" target="_blank" class="deal-btn">Get Deal</a>
                 </div>
-                <a href="https://www.cheapshark.com/redirect?dealID=${deal.dealID}" target="_blank" class="get-deal-btn">Get Deal</a>
             </div>
         `;
-
-        gamesContainer.appendChild(card);
-    });
+    }).join('');
 }
+
+// Search functionality
+function handleSearch() {
+    const query = searchInput.value.toLowerCase().trim();
+    const filtered = allDeals.filter(deal => deal.title.toLowerCase().includes(query));
+    displayDeals(filtered);
+}
+
+searchBtn.addEventListener('click', handleSearch);
+searchInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') handleSearch();
+});
+
+// Filter chips functionality
+filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const filterType = chip.getAttribute('data-filter');
+        let filtered = allDeals;
+
+        if (filterType === 'free') {
+            filtered = allDeals.filter(deal => parseFloat(deal.salePrice) === 0);
+        } else if (filterType === 'under5') {
+            filtered = allDeals.filter(deal => parseFloat(deal.salePrice) < 5);
+        } else if (filterType === 'massive') {
+            filtered = allDeals.filter(deal => parseFloat(deal.savings) >= 90);
+        }
+
+        displayDeals(filtered);
+    });
+});
+
+// Initial fetch on page load
+fetchDeals();

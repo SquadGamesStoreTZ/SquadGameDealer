@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Squardii Game Deals</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="google-site-verification" content="7DQNOmw-epCmbE9Ta_AzK4cvJ26m7au1oKtHTchTh-c" />
-    <link rel="icon" type="image/png" href="squardii logo.jpg">
+    <meta name="google-site-verification" content="7DQNOmw-epCmbE9Ta_AZKcvJ26m7au1oKtHTChTh-c" />
+    <link rel="icon" type="image/png" href="squardii logo.png">
 </head>
 <body>
-
     <!-- Navbar -->
     <header class="navbar">
         <div class="logo">
-           <img src="squardii logo.jpg" alt="Squardii Logo" class="brand-logo">
+            <img src="squardii logo.png" alt="Squardii Logo" class="brand-logo">
             <h1>Squardii Game Deals</h1>
         </div>
     </header>
@@ -27,16 +26,30 @@
                 <input type="text" id="searchInput" placeholder="Search for games (e.g., GTA, Need for Speed, Call of Duty)...">
                 <button id="searchBtn">Search Deals</button>
             </div>
+            
+            <!-- Quick Category Filters -->
+            <div class="filter-chips">
+                <button class="chip active" data-filter="all">All Deals</button>
+                <button class="chip" data-filter="free">Free Games</button>
+                <button class="chip" data-filter="under5">Under $5</button>
+                <button class="chip" data-filter="massive">90%+ Off</button>
+            </div>
         </section>
 
         <!-- Games Grid Container -->
         <div class="games-grid" id="gamesContainer">
             <!-- Dynamic deal cards will render here -->
         </div>
+
+        <!-- About / FAQ Section -->
+        <section class="about-section">
+            <h3>About Squardii Games</h3>
+            <p>Squardii Games Deal Finder is a lightweight, modern web application designed to help gamers track, search, and find the best video game deals across multiple storefronts in real-time.</p>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <p>Updated real-time by Squardii Games. Data powered by CheapShark.</p>
     </footer>
 
