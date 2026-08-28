@@ -1,89 +1,68 @@
-const API_BASE = 'https://www.cheapshark.com/api/1.0';
-let storeMap = {}; // Will hold store ID to store name mapping
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const gamesContainer = document.getElementById('gamesContainer');
 
-const searchForm = document.getElementById('search-form');
-const searchInput = document.getElementById('search-input');
-const dealsGrid = document.getElementById('deals-grid');
-const statusMessage = document.getElementById('status-message');
+// Fetch trending deals on page load
+window.addEventListener('DOMContentLoaded', () => {
+    fetchDeals('');
+});
 
-// Optional: Custom Affiliate Redirect Variable
-// Replace with your affiliate ID if registered with networks like Impact or CJ
-const AFFILIATE_ID = ''; 
+searchBtn.addEventListener('click', () => {
+    fetchDeals(searchInput.value.trim());
+});
 
-// 1. Fetch store info on page load to map storeIDs to real store names
-async function fetchStores() {
-    try {
-        const response = await fetch(`${API_BASE}/stores`);
-        const stores = await response.json();
-        stores.forEach(store => {
-            if (store.isActive) {
-                storeMap[store.storeID] = store.storeName;
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching store metadata:', error);
-    }
-}
-
-// 2. Fetch game deals by search title
-async function searchDeals(title) {
-    statusMessage.innerHTML = '<p>Searching for deals...</p>';
-    dealsGrid.innerHTML = '';
-
-    try {
-        const response = await fetch(`${API_BASE}/deals?title=${encodeURIComponent(title)}&limit=24`);
-        const deals = await response.json();
-
-        if (deals.length === 0) {
-            statusMessage.innerHTML = '<p>No deals found. Try a different search term.</p>';
-            return;
-        }
-
-        statusMessage.innerHTML = '';
-        renderDeals(deals);
-    } catch (error) {
-        console.error('Error fetching deals:', error);
-        statusMessage.innerHTML = '<p>Failed to load deals. Please try again later.</p>';
-    }
-}
-
-// 3. Render deal cards into the DOM
-function renderDeals(deals) {
-    dealsGrid.innerHTML = deals.map(deal => {
-        const storeName = storeMap[deal.storeID] || 'Store';
-        const savings = Math.round(parseFloat(deal.savings));
-        
-        // Construct deal link (CheapShark deal ID to full redirect link)
-        let dealUrl = `https://www.cheapshark.com/redirect?dealID=${deal.dealID}`;
-        if (AFFILIATE_ID) {
-            dealUrl += `&publisherID=${AFFILIATE_ID}`;
-        }
-
-        return `
-            <div class="game-card">
-                <img src="${deal.thumb}" alt="${deal.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
-                <div class="card-details">
-                    <h3>${deal.title}</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Store: ${storeName}</p>
-                    <div class="price-container">
-                        ${deal.normalPrice !== deal.salePrice ? `<span class="normal-price">$${deal.normalPrice}</span>` : ''}
-                        ${savings > 0 ? `<span class="savings-badge">-${savings}%</span>` : ''}
-                    </div>
-                    <a href="${dealUrl}" target="_blank" rel="noopener noreferrer" class="deal-btn">View Deal</a>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// Event Listeners
-searchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const query = searchInput.value.trim();
-    if (query) {
-        searchDeals(query);
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        fetchDeals(searchInput.value.trim());
     }
 });
 
-// Initialize App
-fetchStores();
+async function fetchDeals(query) {
+    gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #fff;">Searching for game deals...</p>';
+
+    let url = 'https://www.cheapshark.com/api/1.0/deals?sortBy=Savings&pageSize=12';
+    if (query) {
+        url = `https://www.cheapshark.com/api/1.0/deals?title=${encodeURIComponent(query)}&pageSize=12`;
+    }
+
+    try {
+        const response = await fetch(url);
+        const deals = await response.json();
+        displayDeals(deals);
+    } catch (error) {
+        gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load deals. Please check your connection.</p>';
+    }
+}
+
+function displayDeals(deals) {
+    gamesContainer.innerHTML = '';
+
+    if (!deals || deals.length === 0) {
+        gamesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #fff;">No game deals found.</p>';
+        return;
+    }
+
+    deals.forEach(deal => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+
+        const normalPrice = parseFloat(deal.normalPrice).toFixed(2);
+        const salePrice = parseFloat(deal.salePrice).toFixed(2);
+
+        card.innerHTML = `
+            <img src="${deal.thumb}" alt="${deal.title}" onerror="this.src='https://via.placeholder.com/200x110?text=Game'">
+            <div class="game-info">
+                <div>
+                    <h3 class="game-title" title="${deal.title}">${deal.title}</h3>
+                    <div class="game-price-row">
+                        <span class="normal-price">$${normalPrice}</span>
+                        <span class="sale-price">$${salePrice}</span>
+                    </div>
+                </div>
+                <a href="https://www.cheapshark.com/redirect?dealID=${deal.dealID}" target="_blank" class="get-deal-btn">Get Deal</a>
+            </div>
+        `;
+
+        gamesContainer.appendChild(card);
+    });
+}

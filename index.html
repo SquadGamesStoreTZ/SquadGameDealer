@@ -3,64 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Deal Finder</title>
+    <title>Squardii Game Deals</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Navbar -->
     <header class="navbar">
         <div class="logo">
-            <h1>🎮 DealFinder</h1>
+            <span class="icon">🎮</span>
+            <h1>Squardii Game Deals</h1>
         </div>
-        <form id="search-form" class="search-box">
-            <input 
-                type="text" 
-                id="search-input" 
-                placeholder="Search for games (e.g. Cyberpunk, Witcher)..." 
-                required 
-                autocomplete="off"
-            >
-            <button type="submit" id="search-btn">Search</button>
-        </form>
     </header>
 
-    <!-- Filter & Sort Controls -->
-    <div class="controls-bar">
-        <div class="filter-group">
-            <label for="store-filter">Store:</label>
-            <select id="store-filter">
-                <option value="ALL">All Stores</option>
-                <option value="1">Steam</option>
-                <option value="7">GOG</option>
-                <option value="25">Epic Games</option>
-                <option value="8">EA App</option>
-                <option value="11">Humble Store</option>
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label for="sort-by">Sort By:</label>
-            <select id="sort-by">
-                <option value="deal-rating">Best Deal</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="savings">Highest Discount</option>
-            </select>
-        </div>
-    </div>
-
+    <!-- Main Content -->
     <main class="container">
-        <!-- Status / Feedback Message -->
-        <section id="status-message" class="status-message">
-            <p>Search for a game title above to compare prices across stores.</p>
+        <!-- Hero Search Section -->
+        <section class="hero">
+            <h2>Find the Best Game Deals & Discounts</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search for games (e.g., GTA, Need for Speed, Call of Duty)...">
+                <button id="searchBtn">Search Deals</button>
+            </div>
         </section>
 
-        <!-- Deals Results Grid -->
-        <section id="deals-grid" class="deals-grid"></section>
+        <!-- Games Grid Container -->
+        <div class="games-grid" id="gamesContainer">
+            <!-- Dynamic deal cards will render here -->
+        </div>
     </main>
 
-    <footer>
-        <p>Powered by <a href="https://www.cheapshark.com/api/1.0/" target="_blank" rel="noopener">CheapShark API</a></p>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Updated real-time by Squardii Games. Data powered by CheapShark.</p>
     </footer>
 
     <script src="script.js"></script>
