@@ -90,7 +90,8 @@ const MY_FAVORITE_GAMES = [
     }
 ];
 
-let allDeals = [...MY_FAVORITE_GAMES];
+let allApiDeals = [];
+let displayedDeals = [];
 
 const gamesContainer = document.getElementById('gamesContainer');
 const searchInput = document.getElementById('searchInput');
@@ -102,13 +103,14 @@ async function fetchDeals() {
         gamesContainer.innerHTML = '<p style="text-align: center; color: #94a3b8; grid-column: 1 / -1;">Loading games...</p>';
         
         const response = await fetch('https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=50');
-        const apiDeals = await response.json();
+        allApiDeals = await response.json();
         
-        // Combine your custom games first, then live API deals
-        allDeals = [...MY_FAVORITE_GAMES, ...apiDeals];
-        displayDeals(allDeals.slice(0, 12));
+        // Combine your custom games first, followed by live API deals for total pool
+        displayedDeals = [...MY_FAVORITE_GAMES, ...allApiDeals];
+        displayDeals(displayedDeals.slice(0, 12));
     } catch (error) {
-        displayDeals(MY_FAVORITE_GAMES);
+        displayedDeals = [...MY_FAVORITE_GAMES];
+        displayDeals(displayedDeals);
     }
 }
 
@@ -120,6 +122,10 @@ function displayDeals(deals) {
 
     gamesContainer.innerHTML = deals.map(deal => {
         const discount = Math.round(deal.savings || 0);
+        const dealLink = deal.dealID && !deal.dealID.includes('-') 
+            ? `https://www.cheapshark.com/redirect?dealID=${deal.dealID}` 
+            : `https://www.google.com/search?q=${encodeURIComponent(deal.title + ' buy game deal')}`;
+
         return `
             <div class="game-card">
                 ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
@@ -130,17 +136,21 @@ function displayDeals(deals) {
                         <span class="sale-price">$${deal.salePrice}</span>
                         <span class="normal-price">$${deal.normalPrice}</span>
                     </div>
-                    <a href="https://www.google.com/search?q=${encodeURIComponent(deal.title + ' buy game deal')}" target="_blank" class="deal-btn">Get Deal</a>
+                    <a href="${dealLink}" target="_blank" class="deal-btn">Get Deal</a>
                 </div>
             </div>
         `;
     }).join('');
 }
 
-// Search functionality
+// Search functionality across ALL combined deals
 function handleSearch() {
     const query = searchInput.value.toLowerCase().trim();
-    const filtered = allDeals.filter(deal => deal.title.toLowerCase().includes(query));
+    if (!query) {
+        displayDeals(displayedDeals.slice(0, 12));
+        return;
+    }
+    const filtered = displayedDeals.filter(deal => deal.title.toLowerCase().includes(query));
     displayDeals(filtered);
 }
 
@@ -156,14 +166,14 @@ filterChips.forEach(chip => {
         chip.classList.add('active');
 
         const filterType = chip.getAttribute('data-filter');
-        let filtered = allDeals;
+        let filtered = displayedDeals;
 
         if (filterType === 'free') {
-            filtered = allDeals.filter(deal => parseFloat(deal.salePrice) === 0);
+            filtered = displayedDeals.filter(deal => parseFloat(deal.salePrice) === 0);
         } else if (filterType === 'under5') {
-            filtered = allDeals.filter(deal => parseFloat(deal.salePrice) < 5);
+            filtered = displayedDeals.filter(deal => parseFloat(deal.salePrice) < 5);
         } else if (filterType === 'massive') {
-            filtered = allDeals.filter(deal => parseFloat(deal.savings) >= 90);
+            filtered = displayedDeals.filter(deal => parseFloat(deal.savings) >= 90);
         }
 
         displayDeals(filtered.slice(0, 12));
