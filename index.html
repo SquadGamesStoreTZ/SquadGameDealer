@@ -4,52 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Squardii Game Deals</title>
+    <link rel="icon" href="squardii logo.jpg" type="image/jpeg">
     <link rel="stylesheet" href="style.css">
-    <meta name="google-site-verification" content="7DQNOmw-epCmbE9Ta_AZKcvJ26m7au1oKtHTChTh-c" />
-    <link rel="icon" type="image/png" href="squardii logo.jpg">
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navigation Bar -->
     <header class="navbar">
-        <div class="logo">
-            <img src="squardii logo.jpg" alt="Squardii Logo" class="brand-logo">
-            <h1>Squardii Game Deals</h1>
+        <div class="nav-brand">
+            <img src="squardii logo.jpg" alt="Squardii Logo" class="logo">
+            <span>Squardii Game Deals</span>
+        </div>
+        <div class="nav-links">
+            <a href="#deals">Deals</a>
+            <a href="#about">About</a>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Hero Search Section -->
-        <section class="hero">
-            <h2>Find the Best Game Deals & Discounts</h2>
-            <div class="search-box">
+    <!-- Hero Search Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find the Best Game Deals & Discounts</h1>
+            <div class="search-bar-container">
                 <input type="text" id="searchInput" placeholder="Search for games (e.g., GTA, Need for Speed, Call of Duty)...">
                 <button id="searchBtn">Search Deals</button>
             </div>
-            
-            <!-- Quick Category Filters -->
+            <!-- Category and Store Filter Chips -->
             <div class="filter-chips">
                 <button class="chip active" data-filter="all">All Deals</button>
                 <button class="chip" data-filter="free">Free Games</button>
                 <button class="chip" data-filter="under5">Under $5</button>
-                <button class="chip" data-filter="massive">90%+ Off</button>
+                <button class="chip" data-filter="90plus">90%+ Off</button>
+                <button class="chip store-chip" data-filter="store-1">Steam</button>
+                <button class="chip store-chip" data-filter="store-2">Epic Games</button>
+                <button class="chip store-chip" data-filter="store-3">GOG</button>
             </div>
-        </section>
-
-        <!-- Games Grid Container -->
-        <div class="games-grid" id="gamesContainer">
-            <!-- Dynamic deal cards will render here -->
         </div>
+    </section>
 
-        <!-- About / FAQ Section -->
-        <section class="about-section">
-            <h3>About Squardii Games</h3>
-            <p>Squardii Games Deal Finder is a lightweight, modern web application designed to help gamers track, search, and find the best video game deals across multiple storefronts in real-time.</p>
-        </section>
+    <!-- Games Grid Section -->
+    <main class="container" id="deals">
+        <div id="gamesGrid" class="games-grid">
+            <!-- Dynamic Game Cards will load here -->
+        </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Footer Section -->
+    <footer class="footer" id="about">
         <p>Updated real-time by Squardii Games. Data powered by CheapShark.</p>
     </footer>
 
