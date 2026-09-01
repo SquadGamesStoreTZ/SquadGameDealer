@@ -4,7 +4,7 @@ A lightweight, modern web application designed to help gamers track, search, and
 
 ## 🚀 Live Demo
 
-Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.github.io/SquadGameStoreTZ/)
+Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.github.io/Squardii-Games-Deal-Finder/)
 
 ## ✨ Features
 
@@ -22,4 +22,4 @@ Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.git
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/SquadGamesStoreTZ/SquadGameStoreTZ.git](https://github.com/SquadGamesStoreTZ/SquadGameStoreTZ.git)
+   git clone [https://github.com/SquadGamesStoreTZ/Squardii-Games-Deal-Finder.git](https://github.com/SquadGamesStoreTZ/Squardii-Games-Deal-Finder.git)
