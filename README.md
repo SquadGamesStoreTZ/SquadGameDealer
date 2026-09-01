@@ -1,10 +1,11 @@
-# 🎮 Squardii Games Deal Finder
+# 🎮 SquadGameDealer
 
 A lightweight, modern web application designed to help gamers track, search, and find the best video game deals across multiple storefronts.
 
 ## 🚀 Live Demo
 
-Check out the live website here: [Squardii Games Deal Finder](https://squadgamesstoretz.github.io/Squardii-Games-Deal-Finder/)
+Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.github.io/SquadGameStoreTZ/)
+
 ## ✨ Features
 
 - **Game Search:** Instantly look up your favorite video game titles.
@@ -21,4 +22,4 @@ Check out the live website here: [Squardii Games Deal Finder](https://squadgames
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/Squardii/Squardii-Games-Deal-Finder.git](https://github.com/Squardii/Squardii-Games-Deal-Finder.git)
+   git clone [https://github.com/SquadGamesStoreTZ/SquadGameStoreTZ.git](https://github.com/SquadGamesStoreTZ/SquadGameStoreTZ.git)
