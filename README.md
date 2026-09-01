@@ -4,7 +4,7 @@ A lightweight, modern web application designed to help gamers track, search, and
 
 ## 🚀 Live Demo
 
-Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.github.io/Squardii-Games-Deal-Finder/)
+Check out the live website here: [SquadGameDealer](https://squadgamesstoretz.github.io/SquadGameDealer/)
 
 ## ✨ Features
 
