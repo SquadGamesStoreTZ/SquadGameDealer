@@ -4,8 +4,7 @@ A lightweight, modern web application designed to help gamers track, search, and
 
 ## 🚀 Live Demo
 
-Check out the live website here: [Squardii Games Deal Finder]([https://squardii.github.io/Squardii-Games-Deal-Finder/](https://github.com/SquadGamesStoreTZ/Squardii-Games-Deal-Finder))
-
+Check out the live website here: Squardii Games Deal Finder
 ## ✨ Features
 
 - **Game Search:** Instantly look up your favorite video game titles.
