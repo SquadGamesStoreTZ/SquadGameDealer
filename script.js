@@ -254,9 +254,18 @@ function renderGames(games) {
         card.className = 'game-card';
 
         const storeName = STORE_MAP[game.storeID] || 'Store Deal';
-        const dealLink = game.dealID.startsWith('fav-') 
-            ? `https://www.cheapshark.com/search?q=${encodeURIComponent(game.title)}`
-            : `https://www.cheapshark.com/redirect?dealID=${game.dealID}`;
+        
+        // Updated dealLink logic: routes favorites straight to Steam/Epic store searches instead of CheapShark's search page
+        let dealLink;
+        if (game.dealID.startsWith('fav-')) {
+            if (game.storeID === '2') {
+                dealLink = `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(game.title)}`;
+            } else {
+                dealLink = `https://store.steampowered.com/search/?term=${encodeURIComponent(game.title)}`;
+            }
+        } else {
+            dealLink = `https://www.cheapshark.com/redirect?dealID=${game.dealID}`;
+        }
 
         card.innerHTML = `
             <div class="card-image-container">
