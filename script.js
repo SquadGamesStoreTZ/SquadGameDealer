@@ -9,7 +9,7 @@ const STORE_MAP = {
     "25": "Itch.io"
 };
 
-// 12 Popular Favorite Games pinned permanently to the front
+// 12 Popular Favorite Games pinned permanently to the front (with direct product links)
 const FAVORITE_GAMES = [
     {
         title: "The Last of Us Part I",
@@ -18,7 +18,8 @@ const FAVORITE_GAMES = [
         savings: "33% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/header.jpg",
         dealID: "fav-1",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I/"
     },
     {
         title: "Grand Theft Auto V",
@@ -27,7 +28,8 @@ const FAVORITE_GAMES = [
         savings: "50% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
         dealID: "fav-2",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/"
     },
     {
         title: "Need for Speed Heat",
@@ -36,7 +38,8 @@ const FAVORITE_GAMES = [
         savings: "90% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1222680/header.jpg",
         dealID: "fav-3",
-        storeID: "2"
+        storeID: "2",
+        url: "https://store.epicgames.com/p/need-for-speed-heat"
     },
     {
         title: "Tomb Raider",
@@ -45,7 +48,8 @@ const FAVORITE_GAMES = [
         savings: "85% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/203160/header.jpg",
         dealID: "fav-4",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/203160/Tomb_Raider/"
     },
     {
         title: "CarX Street",
@@ -54,7 +58,8 @@ const FAVORITE_GAMES = [
         savings: "30% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1114130/header.jpg",
         dealID: "fav-5",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/1114130/CarX_Street/"
     },
     {
         title: "Euro Truck Simulator 2",
@@ -63,7 +68,8 @@ const FAVORITE_GAMES = [
         savings: "75% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg",
         dealID: "fav-6",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/227300/Euro_Truck_Simulator_2/"
     },
     {
         title: "Need for Speed Unbound",
@@ -72,7 +78,8 @@ const FAVORITE_GAMES = [
         savings: "90% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1846250/header.jpg",
         dealID: "fav-7",
-        storeID: "2"
+        storeID: "2",
+        url: "https://store.epicgames.com/p/need-for-speed-unbound"
     },
     {
         title: "Need for Speed Payback",
@@ -81,7 +88,8 @@ const FAVORITE_GAMES = [
         savings: "90% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1262580/header.jpg",
         dealID: "fav-8",
-        storeID: "2"
+        storeID: "2",
+        url: "https://store.epicgames.com/p/need-for-speed-payback"
     },
     {
         title: "The Crew Motorfest",
@@ -90,7 +98,8 @@ const FAVORITE_GAMES = [
         savings: "60% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/2698490/header.jpg",
         dealID: "fav-9",
-        storeID: "3"
+        storeID: "3",
+        url: "https://www.gog.com/en/game/the_crew_motorfest"
     },
     {
         title: "Forza Horizon 5",
@@ -99,7 +108,8 @@ const FAVORITE_GAMES = [
         savings: "50% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
         dealID: "fav-10",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/1551360/Forza_Horizon_5/"
     },
     {
         title: "Call of Duty: Modern Warfare III",
@@ -108,7 +118,8 @@ const FAVORITE_GAMES = [
         savings: "50% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/2519060/header.jpg",
         dealID: "fav-11",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/2519060/Call_of_Duty_Modern_Warfare_III/"
     },
     {
         title: "Red Dead Redemption 2",
@@ -117,7 +128,8 @@ const FAVORITE_GAMES = [
         savings: "67% OFF",
         thumb: "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
         dealID: "fav-12",
-        storeID: "1"
+        storeID: "1",
+        url: "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/"
     }
 ];
 
@@ -255,17 +267,10 @@ function renderGames(games) {
 
         const storeName = STORE_MAP[game.storeID] || 'Store Deal';
         
-        // Updated dealLink logic: routes favorites straight to Steam/Epic store searches instead of CheapShark's search page
-        let dealLink;
-        if (game.dealID.startsWith('fav-')) {
-            if (game.storeID === '2') {
-                dealLink = `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(game.title)}`;
-            } else {
-                dealLink = `https://store.steampowered.com/search/?term=${encodeURIComponent(game.title)}`;
-            }
-        } else {
-            dealLink = `https://www.cheapshark.com/redirect?dealID=${game.dealID}`;
-        }
+        // Direct link to the specific game URL for favorites, or CheapShark redirect for API deals
+        const dealLink = game.url 
+            ? game.url 
+            : `https://www.cheapshark.com/redirect?dealID=${game.dealID}`;
 
         card.innerHTML = `
             <div class="card-image-container">
